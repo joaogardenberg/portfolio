@@ -1,0 +1,26 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": "**/tsconfig.json" },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/default-param-last": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-var-requires": "off",
+    "import/no-anonymous-default-export": "off",
+    "no-empty": ["warn", { "allowEmptyCatch": true }],
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/exhaustive-deps": "off"
+  },
+  "env": { "browser": true, "node": true, "jest": true }
+}

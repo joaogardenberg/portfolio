@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo "*** Setting environment variables ***"
+export $(grep -v '^#' .env | xargs)
+
+echo "*** Installing packages ***"
+npm install --silent
+
+echo "*** Starting React app ***"
+npm start
