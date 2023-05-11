@@ -52,7 +52,11 @@ export default function Sun({ animationDuration = 2000, className }: SunProps) {
   }, [currentPath])
 
   return (
-    <svg viewBox="0 0 110 110" className={classNames('sun', className)}>
+    <svg
+      viewBox="0 0 110 110"
+      preserveAspectRatio="none"
+      className={classNames('sun', className)}
+    >
       <g transform="translate(110, 0)">
         <animated.path d={outer} fill="#fdb813"></animated.path>
         <animated.path d={inner} fill="#fce570"></animated.path>
