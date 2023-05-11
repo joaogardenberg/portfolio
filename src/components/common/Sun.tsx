@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { range, sample } from 'lodash'
 import { animated, easings, useSpring } from '@react-spring/web'
-import classNames from 'classnames'
 
 interface SunProps {
-  animationDuration?: number
   className?: string
+  outerColor?: string
+  innerColor?: string
+  animationDuration?: number
 }
 
 const OUTER_PATHS = [
@@ -24,7 +25,12 @@ const INNER_PATHS = [
   'M0 54.1C-5.3 52.6 -10.6 51.1 -16.1 49.5C-21.5 47.8 -27.1 46.1 -30.9 42.5C-34.6 38.9 -36.5 33.5 -40 29.1C-43.6 24.7 -48.8 21.4 -51.4 16.7C-54.1 12 -54.1 6 -54.1 0L0 0Z'
 ]
 
-export default function Sun({ animationDuration = 2000, className }: SunProps) {
+export default function Sun({
+  className,
+  outerColor = '#fdb813',
+  innerColor = '#fce570',
+  animationDuration = 2000
+}: SunProps) {
   const [currentPath, setCurrentPath] = useState(0)
 
   const [{ d: outer }, setOuter] = useSpring(() => ({
@@ -52,14 +58,10 @@ export default function Sun({ animationDuration = 2000, className }: SunProps) {
   }, [currentPath])
 
   return (
-    <svg
-      viewBox="0 0 110 110"
-      preserveAspectRatio="none"
-      className={classNames('sun', className)}
-    >
+    <svg viewBox="0 0 110 110" preserveAspectRatio="none" className={className}>
       <g transform="translate(110, 0)">
-        <animated.path d={outer} fill="#fdb813"></animated.path>
-        <animated.path d={inner} fill="#fce570"></animated.path>
+        <animated.path d={outer} fill={outerColor} />
+        <animated.path d={inner} fill={innerColor} />
       </g>
     </svg>
   )

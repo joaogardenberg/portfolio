@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { range, sample } from 'lodash'
 import { animated, easings, useSpring } from '@react-spring/web'
-import classNames from 'classnames'
 
 interface OceanProps {
-  animationDuration?: number
   className?: string
+  topColor?: string
+  middleColor?: string
+  bottomColor?: string
+  animationDuration?: number
 }
 
 const TOP_PATHS = [
@@ -33,8 +35,11 @@ const BOTTOM_PATHS = [
 ]
 
 export default function Ocean({
-  animationDuration = 2000,
-  className
+  className,
+  topColor = '#47d5fc',
+  middleColor = '#1cbeeb',
+  bottomColor = '#0782a6',
+  animationDuration = 2000
 }: OceanProps) {
   const [currentPath, setCurrentPath] = useState(0)
 
@@ -84,15 +89,11 @@ export default function Ocean({
   }, [currentPath])
 
   return (
-    <svg
-      viewBox="0 0 900 100"
-      preserveAspectRatio="none"
-      className={classNames('ocean', className)}
-    >
+    <svg viewBox="0 0 900 100" preserveAspectRatio="none" className={className}>
       <g transform="translate(0, -500)">
-        <animated.path d={top} fill="#47d5fc"></animated.path>
-        <animated.path d={middle} fill="#1cbeebbb"></animated.path>
-        <animated.path d={bottom} fill="#0782a666"></animated.path>
+        <animated.path d={top} fill={topColor}></animated.path>
+        <animated.path d={middle} fill={middleColor}></animated.path>
+        <animated.path d={bottom} fill={bottomColor}></animated.path>
       </g>
     </svg>
   )
