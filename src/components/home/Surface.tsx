@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Ocean from 'components/common/Ocean'
 
 const StyledSurface = styled(animated.section)`
+  background-color: #8ae5ff;
   height: 100vh;
   position: relative;
 
@@ -18,6 +19,14 @@ const StyledSurface = styled(animated.section)`
 
     path {
       filter: drop-shadow(0 0 1px #00000088);
+    }
+
+    &__top {
+      fill: #47d5fc;
+    }
+
+    &__middle {
+      fill: #1cbeeb;
     }
   }
 `
