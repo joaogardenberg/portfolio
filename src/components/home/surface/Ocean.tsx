@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { range, sample } from 'lodash'
-import { animated, easings, useSpring } from '@react-spring/web'
-import classNames from 'classnames'
+import { animated, easings, useInView, useSpring } from '@react-spring/web'
 
 interface OceanProps {
   className?: string
@@ -42,6 +41,7 @@ export default function Ocean({
   bottomColor = '#0782a6',
   animationDuration = 2000
 }: OceanProps) {
+  const [ref, inView] = useInView()
   const [currentPath, setCurrentPath] = useState(0)
 
   const [{ d: top }, setTop] = useSpring(() => ({
@@ -60,58 +60,51 @@ export default function Ocean({
   }))
 
   useEffect(() => {
-    const timeouts: NodeJS.Timeout[] = []
+    if (inView) {
+      const timeouts: NodeJS.Timeout[] = []
 
-    timeouts.push(
-      setTimeout(() => {
-        const paths = range(TOP_PATHS.length)
-        paths.splice(currentPath, 1)
-        const newPath = sample(paths) as number
-        setTop({ d: TOP_PATHS[newPath] })
+      timeouts.push(
+        setTimeout(() => {
+          const paths = range(TOP_PATHS.length)
+          paths.splice(currentPath, 1)
+          const newPath = sample(paths) as number
+          setTop({ d: TOP_PATHS[newPath] })
 
-        timeouts.push(
-          setTimeout(() => {
-            setMiddle({ d: MIDDLE_PATHS[newPath] })
+          timeouts.push(
+            setTimeout(() => {
+              setMiddle({ d: MIDDLE_PATHS[newPath] })
 
-            timeouts.push(
-              setTimeout(() => {
-                setBottom({ d: BOTTOM_PATHS[newPath] })
-                setCurrentPath(newPath)
-              }, animationDuration / 3)
-            )
-          }, animationDuration / 3)
-        )
-      }, animationDuration / 3)
-    )
+              timeouts.push(
+                setTimeout(() => {
+                  setBottom({ d: BOTTOM_PATHS[newPath] })
+                  setCurrentPath(newPath)
+                }, animationDuration / 3)
+              )
+            }, animationDuration / 3)
+          )
+        }, animationDuration / 3)
+      )
 
-    return () => {
-      timeouts.map(clearTimeout)
+      return () => {
+        timeouts.map(clearTimeout)
+      }
     }
-  }, [currentPath])
+  }, [inView, currentPath])
 
   return (
-    <svg viewBox="0 0 900 100" preserveAspectRatio="none" className={className}>
-      <g transform="translate(0, -500)">
-        <animated.path
-          d={top}
-          fill={topColor}
-          className={classNames('top', { [`${className}__top`]: className })}
-        ></animated.path>
-        <animated.path
-          d={middle}
-          fill={middleColor}
-          className={classNames('middle', {
-            [`${className}__middle`]: className
-          })}
-        ></animated.path>
-        <animated.path
-          d={bottom}
-          fill={bottomColor}
-          className={classNames('bottom', {
-            [`${className}__bottom`]: className
-          })}
-        ></animated.path>
-      </g>
+    <svg
+      viewBox="0 0 900 100"
+      preserveAspectRatio="none"
+      className={className}
+      ref={ref}
+    >
+      {inView && (
+        <g transform="translate(0, -500)">
+          <animated.path d={top} fill={topColor} className="top" />
+          <animated.path d={middle} fill={middleColor} className="middle" />
+          <animated.path d={bottom} fill={bottomColor} className="bottom" />
+        </g>
+      )}
     </svg>
   )
 }

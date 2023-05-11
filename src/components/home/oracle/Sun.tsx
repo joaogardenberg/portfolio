@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { range, sample } from 'lodash'
-import { animated, easings, useSpring } from '@react-spring/web'
+import { animated, easings, useInView, useSpring } from '@react-spring/web'
 
 interface SunProps {
   className?: string
@@ -31,6 +31,7 @@ export default function Sun({
   innerColor = '#fce570',
   animationDuration = 2000
 }: SunProps) {
+  const [ref, inView] = useInView()
   const [currentPath, setCurrentPath] = useState(0)
 
   const [{ d: outer }, setOuter] = useSpring(() => ({
@@ -44,25 +45,34 @@ export default function Sun({
   }))
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      const paths = range(OUTER_PATHS.length)
-      paths.splice(currentPath, 1)
-      const newPath = sample(paths) as number
+    if (inView) {
+      const timeout = setTimeout(() => {
+        const paths = range(OUTER_PATHS.length)
+        paths.splice(currentPath, 1)
+        const newPath = sample(paths) as number
 
-      setOuter({ d: OUTER_PATHS[newPath] })
-      setInner({ d: INNER_PATHS[newPath] })
-      setCurrentPath(newPath)
-    }, animationDuration)
+        setOuter({ d: OUTER_PATHS[newPath] })
+        setInner({ d: INNER_PATHS[newPath] })
+        setCurrentPath(newPath)
+      }, animationDuration)
 
-    return () => clearInterval(timeout)
-  }, [currentPath])
+      return () => clearInterval(timeout)
+    }
+  }, [inView, currentPath])
 
   return (
-    <svg viewBox="0 0 110 110" preserveAspectRatio="none" className={className}>
-      <g transform="translate(110, 0)">
-        <animated.path d={outer} fill={outerColor} />
-        <animated.path d={inner} fill={innerColor} />
-      </g>
+    <svg
+      viewBox="0 0 110 110"
+      preserveAspectRatio="none"
+      className={className}
+      ref={ref}
+    >
+      {inView && (
+        <g transform="translate(110, 0)">
+          <animated.path d={outer} fill={outerColor} className="outer" />
+          <animated.path d={inner} fill={innerColor} className="inner" />
+        </g>
+      )}
     </svg>
   )
 }

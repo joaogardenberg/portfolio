@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useScroll, useSpring } from '@react-spring/web'
 import styled from 'styled-components'
-import Sun from 'components/common/Sun'
+import Sun from './Sun'
 
 const StyledOracle = styled.button`
   background-color: transparent;
@@ -39,12 +39,14 @@ const StyledOracle = styled.button`
 export default function Oracle() {
   const [height, setHeight] = useState(0)
 
-  const [{ scroll }, set] = useSpring(() => ({
-    scroll: 0,
+  const [{ scrollSpring }, set] = useSpring(() => ({
+    scrollSpring: 0,
     config: { duration: 0 }
   }))
 
-  useScroll({ onChange: ({ value: { scrollY } }) => set({ scroll: scrollY }) })
+  useScroll({
+    onChange: ({ value: { scrollY } }) => set({ scrollSpring: scrollY })
+  })
 
   useEffect(() => {
     const onResize = () => setHeight(window.innerHeight)
@@ -58,15 +60,17 @@ export default function Oracle() {
       <Sun
         className="sun"
         outerColor={
-          scroll.to({
+          scrollSpring.to({
             range: [0, (height * 5) / 6],
-            output: ['#fdb813', '#e6680e']
+            output: ['#fdb813', '#e6680e'],
+            extrapolate: 'clamp'
           }) as unknown as string
         }
         innerColor={
-          scroll.to({
+          scrollSpring.to({
             range: [0, (height * 5) / 6],
-            output: ['#fce570', '#e68c0e']
+            output: ['#fce570', '#e68c0e'],
+            extrapolate: 'clamp'
           }) as unknown as string
         }
       />
