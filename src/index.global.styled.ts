@@ -5,8 +5,19 @@ const styled = { createGlobalStyle }
 export default styled.createGlobalStyle`
   html,
   body {
+    overscroll-behavior: none;
+  }
+
+  *,
+  *::before,
+  *::after {
     margin: 0;
-    overflow: hidden;
+    outline: none;
     padding: 0;
+  }
+
+  img,
+  svg {
+    display: block;
   }
 `

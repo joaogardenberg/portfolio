@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes as RouterRoutes } from 'react-router-dom'
 import Base from './Base'
-import Home from './Home'
+import Home from './home/Home'
 
 export default function Routes() {
   return (
