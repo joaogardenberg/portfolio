@@ -27,8 +27,9 @@ export default styled(animated.section)`
     }
 
     &:not(.in) {
-      left: 100%;
+      left: unset;
       opacity: 0;
+      right: 100%;
       transform: translateY(100%);
     }
 
