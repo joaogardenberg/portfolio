@@ -68,9 +68,7 @@ export default function Surface() {
         }}
       />
       <Ocean
-        className={classNames('ocean', {
-          in: !firstRender && scroll <= scrollMax
-        })}
+        className={classNames('ocean', { in: !firstRender })}
         topColor={
           scrollSpring.to({
             range: [scrollMin, (scrollMax * 5) / 6],
